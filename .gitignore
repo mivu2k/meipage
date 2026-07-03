@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build output
+frontend/dist/
+
+# Environment files (secrets) — keep .env.example
+.env
+.env.local
+*.local
+
+# Logs & OS cruft
+*.log
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Claude session files
+.claude/settings.local.json
