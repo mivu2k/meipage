@@ -38,7 +38,9 @@ gunzip < db-2026-07-03.sql.gz | mysql wp
 tar xzf uploads-2026-07-03.tar.gz -C /var/www/wp
 chown -R www-data:www-data /var/www/wp/wp-content/uploads
 # code
-git clone <repo> && cp -r wordpress/wp-content/plugins/dtc-headless /var/www/wp/wp-content/plugins/
+git clone https://github.com/mivu2k/meipage.git /opt/meipage
+cp -r /opt/meipage/wordpress/wp-content/plugins/dtc-headless /var/www/wp/wp-content/plugins/
+cd /opt/meipage
 cd frontend && npm ci && npm run build && rsync -a dist/ /var/www/site/
 ```
 
