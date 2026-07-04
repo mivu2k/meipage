@@ -78,10 +78,10 @@ const consult = useMutation({
               Thank you — our team will contact you shortly.
             </div>
             <form v-else class="mt-4 space-y-3" @submit.prevent="consult.mutate()">
-              <input v-model="form.name" required placeholder="Full name" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
-              <input v-model="form.email" required type="email" placeholder="Work email" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
-              <input v-model="form.organization" required placeholder="Organization" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
-              <textarea v-model="form.message" required rows="4" placeholder="Your requirements…" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+              <input v-model="form.name" required placeholder="Full name" class="input" />
+              <input v-model="form.email" required type="email" placeholder="Work email" class="input" />
+              <input v-model="form.organization" required placeholder="Organization" class="input" />
+              <textarea v-model="form.message" required rows="4" placeholder="Your requirements…" class="input" />
               <button type="submit" class="btn-primary w-full justify-center" :disabled="consult.isPending.value">
                 {{ consult.isPending.value ? 'Sending…' : 'Submit Request' }}
               </button>

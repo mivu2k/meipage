@@ -61,8 +61,8 @@ const statusColor: Record<string, string> = {
 
     <form v-if="showNew" class="mt-6 space-y-3 rounded-lg border border-slate-200 bg-white p-6" @submit.prevent="create.mutate()">
       <div class="grid gap-3 sm:grid-cols-2">
-        <input v-model="form.subject" required placeholder="Subject" class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-        <select v-model="form.type" class="rounded-md border border-slate-300 px-3 py-2 text-sm">
+        <input v-model="form.subject" required placeholder="Subject" class="input" />
+        <select v-model="form.type" class="input">
           <option value="technical">Technical Support</option>
           <option value="warranty">Warranty Request</option>
           <option value="repair">Repair Request</option>
@@ -70,7 +70,7 @@ const statusColor: Record<string, string> = {
           <option value="training">Training Request</option>
         </select>
       </div>
-      <textarea v-model="form.message" required rows="4" placeholder="Describe your issue…" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+      <textarea v-model="form.message" required rows="4" placeholder="Describe your issue…" class="input" />
       <button type="submit" class="btn-primary" :disabled="create.isPending.value">
         {{ create.isPending.value ? 'Creating…' : 'Create Ticket' }}
       </button>
@@ -94,7 +94,7 @@ const statusColor: Record<string, string> = {
             <p class="mt-1 text-slate-700">{{ m.body }}</p>
           </div>
           <form v-if="t.status !== 'closed'" class="mt-3 flex gap-2" @submit.prevent="sendReply.mutate(t.id)">
-            <input v-model="reply" required placeholder="Write a reply…" class="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm" />
+            <input v-model="reply" required placeholder="Write a reply…" class="flex-1 input" />
             <button type="submit" class="btn-primary text-sm" :disabled="sendReply.isPending.value">Send</button>
           </form>
         </div>

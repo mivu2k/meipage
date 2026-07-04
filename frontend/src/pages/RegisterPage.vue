@@ -28,12 +28,12 @@ const submit = useMutation({ mutationFn: () => register(form.value) })
 
       <form v-else class="mt-6 space-y-4" @submit.prevent="submit.mutate()">
         <div class="grid gap-4 sm:grid-cols-2">
-          <input v-model="form.name" required placeholder="Full name" class="rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
-          <input v-model="form.email" required type="email" placeholder="Work email" class="rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
+          <input v-model="form.name" required placeholder="Full name" class="input" />
+          <input v-model="form.email" required type="email" placeholder="Work email" class="input" />
         </div>
         <div class="grid gap-4 sm:grid-cols-2">
-          <input v-model="form.organization" required placeholder="Organization" class="rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
-          <input v-model="form.country" required placeholder="Country" class="rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
+          <input v-model="form.organization" required placeholder="Organization" class="input" />
+          <input v-model="form.country" required placeholder="Country" class="input" />
         </div>
         <input
           v-model="form.password"
@@ -42,7 +42,7 @@ const submit = useMutation({ mutationFn: () => register(form.value) })
           minlength="8"
           placeholder="Password (min. 8 characters)"
           autocomplete="new-password"
-          class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm"
+          class="input"
         />
         <button type="submit" class="btn-primary w-full justify-center" :disabled="submit.isPending.value">
           {{ submit.isPending.value ? 'Submitting…' : 'Create Account' }}

@@ -18,6 +18,26 @@ app.use(VueQueryPlugin, {
 })
 app.use(router)
 
+// v-reveal: fades elements in as they scroll into view (see .reveal in style.css)
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible')
+        revealObserver.unobserve(e.target)
+      }
+    }
+  },
+  { threshold: 0.12 },
+)
+app.directive('reveal', {
+  mounted(el: HTMLElement, binding) {
+    el.classList.add('reveal')
+    if (typeof binding.value === 'number') el.style.transitionDelay = `${binding.value}ms`
+    revealObserver.observe(el)
+  },
+})
+
 // Boot: restore auth session and load site settings before first render.
 const auth = useAuthStore()
 const settings = useSettingsStore()

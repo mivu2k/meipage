@@ -40,14 +40,14 @@ function resetPage() {
           v-model="search"
           type="search"
           placeholder="Search products…"
-          class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm focus:border-accent focus:outline-none lg:max-w-xs"
+          class="input focus:border-accent focus:outline-none lg:max-w-xs"
           @input="resetPage"
         />
-        <select v-model="brand" class="rounded-md border border-slate-300 px-4 py-2.5 text-sm" @change="resetPage">
+        <select v-model="brand" class="input" @change="resetPage">
           <option value="">All Brands</option>
           <option v-for="b in brands" :key="b.id" :value="b.slug">{{ b.title }}</option>
         </select>
-        <select v-model="category" class="rounded-md border border-slate-300 px-4 py-2.5 text-sm" @change="resetPage">
+        <select v-model="category" class="input" @change="resetPage">
           <option value="">All Categories</option>
           <option v-for="c in categories" :key="c.id" :value="c.slug">
             {{ c.parent ? '— ' : '' }}{{ c.name }}

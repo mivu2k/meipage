@@ -29,8 +29,8 @@ async function submit() {
       <p class="mt-1 text-sm text-slate-500">Access downloads, tickets, repair tracking and more.</p>
 
       <form class="mt-6 space-y-4" @submit.prevent="submit">
-        <input v-model="username" required placeholder="Username or email" autocomplete="username" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
-        <input v-model="password" required type="password" placeholder="Password" autocomplete="current-password" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
+        <input v-model="username" required placeholder="Username or email" autocomplete="username" class="input" />
+        <input v-model="password" required type="password" placeholder="Password" autocomplete="current-password" class="input" />
         <button type="submit" class="btn-primary w-full justify-center" :disabled="auth.loading">
           {{ auth.loading ? 'Signing in…' : 'Sign In' }}
         </button>

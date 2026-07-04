@@ -45,11 +45,11 @@ const apply = useMutation({
 
           <form v-if="applyingTo === job.id" class="mt-6 space-y-3 border-t border-slate-100 pt-6" @submit.prevent="apply.mutate()">
             <div class="grid gap-3 sm:grid-cols-3">
-              <input v-model="form.name" required placeholder="Full name" class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-              <input v-model="form.email" required type="email" placeholder="Email" class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-              <input v-model="form.phone" placeholder="Phone" class="rounded-md border border-slate-300 px-3 py-2 text-sm" />
+              <input v-model="form.name" required placeholder="Full name" class="input" />
+              <input v-model="form.email" required type="email" placeholder="Email" class="input" />
+              <input v-model="form.phone" placeholder="Phone" class="input" />
             </div>
-            <textarea v-model="form.cover_letter" rows="4" placeholder="Cover letter / link to your resume…" class="w-full rounded-md border border-slate-300 px-3 py-2 text-sm" />
+            <textarea v-model="form.cover_letter" rows="4" placeholder="Cover letter / link to your resume…" class="input" />
             <button type="submit" class="btn-primary" :disabled="apply.isPending.value">
               {{ apply.isPending.value ? 'Submitting…' : 'Submit Application' }}
             </button>

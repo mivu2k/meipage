@@ -59,10 +59,10 @@ const contact = useMutation({ mutationFn: () => submitContact(form.value) })
         </div>
         <form v-else class="space-y-4" @submit.prevent="contact.mutate()">
           <div class="grid gap-4 sm:grid-cols-2">
-            <input v-model="form.name" required placeholder="Full name" class="rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
-            <input v-model="form.email" required type="email" placeholder="Email" class="rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
+            <input v-model="form.name" required placeholder="Full name" class="input" />
+            <input v-model="form.email" required type="email" placeholder="Email" class="input" />
           </div>
-          <select v-model="form.department" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm">
+          <select v-model="form.department" class="input">
             <option value="">Select department (optional)</option>
             <option>Sales</option>
             <option>Projects</option>
@@ -70,8 +70,8 @@ const contact = useMutation({ mutationFn: () => submitContact(form.value) })
             <option>HR</option>
             <option>Accounts</option>
           </select>
-          <input v-model="form.subject" required placeholder="Subject" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
-          <textarea v-model="form.message" required rows="6" placeholder="Your message…" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
+          <input v-model="form.subject" required placeholder="Subject" class="input" />
+          <textarea v-model="form.message" required rows="6" placeholder="Your message…" class="input" />
           <button type="submit" class="btn-primary" :disabled="contact.isPending.value">
             {{ contact.isPending.value ? 'Sending…' : 'Send Message' }}
           </button>

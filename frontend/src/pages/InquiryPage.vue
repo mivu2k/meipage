@@ -62,11 +62,11 @@ const submit = useMutation({
           <div>
             <h2 class="section-title mb-6">Your Details</h2>
             <form class="space-y-4" @submit.prevent="submit.mutate()">
-              <input v-model="form.name" required placeholder="Full name" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
-              <input v-model="form.email" required type="email" placeholder="Work email" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
-              <input v-model="form.organization" required placeholder="Organization" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
-              <input v-model="form.country" required placeholder="Country" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
-              <textarea v-model="form.message" rows="5" placeholder="Additional requirements, quantities, deadlines…" class="w-full rounded-md border border-slate-300 px-4 py-2.5 text-sm" />
+              <input v-model="form.name" required placeholder="Full name" class="input" />
+              <input v-model="form.email" required type="email" placeholder="Work email" class="input" />
+              <input v-model="form.organization" required placeholder="Organization" class="input" />
+              <input v-model="form.country" required placeholder="Country" class="input" />
+              <textarea v-model="form.message" rows="5" placeholder="Additional requirements, quantities, deadlines…" class="input" />
               <button type="submit" class="btn-primary w-full justify-center" :disabled="submit.isPending.value">
                 {{ submit.isPending.value ? 'Submitting…' : 'Submit Inquiry' }}
               </button>

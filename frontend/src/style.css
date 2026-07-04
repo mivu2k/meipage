@@ -4,8 +4,10 @@
   --color-primary: var(--dtc-primary, #0b1f3a);
   --color-secondary: var(--dtc-secondary, #12365f);
   --color-accent: var(--dtc-accent, #2dd4bf);
-  --color-surface: #0a0f1a;
+  --color-surface: #070c16;
+  --color-surface-2: #0d1526;
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', ui-sans-serif, sans-serif;
 }
 
 :root {
@@ -20,28 +22,113 @@ html {
 }
 
 body {
-  @apply bg-white text-slate-800 antialiased;
+  @apply bg-white text-slate-700 antialiased;
+  font-feature-settings: 'ss01', 'cv05';
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--dtc-accent) 30%, transparent);
 }
 
 .container-page {
   @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 
+/* ---------- Buttons ---------- */
 .btn-primary {
-  @apply inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent;
+  @apply inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-secondary hover:shadow-lg hover:shadow-primary/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent active:translate-y-0;
+}
+
+.btn-accent {
+  @apply inline-flex items-center gap-2 rounded-lg px-6 py-3 text-sm font-bold text-surface transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-white active:translate-y-0;
+  background: linear-gradient(135deg, var(--dtc-accent), color-mix(in srgb, var(--dtc-accent) 70%, #38bdf8));
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--dtc-accent) 25%, transparent);
 }
 
 .btn-outline {
-  @apply inline-flex items-center gap-2 rounded-md border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-primary hover:text-primary;
+  @apply inline-flex items-center gap-2 rounded-lg border border-slate-300 px-6 py-3 text-sm font-semibold text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-primary hover:shadow-md active:translate-y-0;
 }
 
+.btn-ghost-dark {
+  @apply inline-flex items-center gap-2 rounded-lg border border-white/25 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-accent hover:text-accent active:translate-y-0;
+}
+
+/* ---------- Sections & headings ---------- */
 .section-title {
-  @apply text-2xl font-bold tracking-tight text-primary sm:text-3xl;
+  @apply text-3xl font-bold tracking-tight text-primary sm:text-4xl;
 }
 
+.section-kicker {
+  @apply mb-3 text-xs font-bold tracking-[0.3em] text-accent uppercase;
+}
+
+.section-dark {
+  @apply relative overflow-hidden bg-surface text-white;
+}
+
+/* Futuristic grid backdrop for dark sections */
+.tech-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--dtc-accent) 12%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--dtc-accent) 12%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 25%, transparent 75%);
+}
+
+.glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+  background: color-mix(in srgb, var(--dtc-accent) 18%, transparent);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  @apply rounded-2xl border border-slate-200 bg-white transition-all duration-300;
+}
+.card-hover {
+  @apply hover:-translate-y-1 hover:border-accent/60 hover:shadow-xl hover:shadow-slate-200/60;
+}
+
+/* ---------- Forms ---------- */
+.input {
+  @apply w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm transition focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none;
+}
+
+/* ---------- Scroll reveal (v-reveal directive) ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- WP content ---------- */
 .prose-wp :is(h2, h3) {
   @apply mt-6 mb-2 font-bold text-primary;
 }
 .prose-wp p {
   @apply my-3 leading-relaxed;
+}
+.prose-wp a {
+  @apply text-accent underline-offset-2 hover:underline;
 }
