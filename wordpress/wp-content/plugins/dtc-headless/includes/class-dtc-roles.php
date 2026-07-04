@@ -16,6 +16,10 @@ class DTC_Roles
 
     public static function add_roles(): void
     {
+        // Self-registered accounts await admin approval: no portal capabilities
+        // until an administrator promotes them to Customer/Dealer/Partner.
+        add_role('dtc_pending', 'Pending Approval', ['read' => true]);
+
         foreach (self::ROLES as $slug => $label) {
             add_role($slug, $label, [
                 'read' => true,

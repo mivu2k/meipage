@@ -88,6 +88,11 @@ class DTC_JWT
             'callback' => [self::class, 'login'],
             'permission_callback' => '__return_true',
         ]);
+        register_rest_route(DTC_API_NAMESPACE, '/auth/register', [
+            'methods' => 'POST',
+            'callback' => [self::class, 'register'],
+            'permission_callback' => [DTC_Rest_Forms::class, 'rate_limit'],
+        ]);
         register_rest_route(DTC_API_NAMESPACE, '/auth/me', [
             'methods' => 'GET',
             'callback' => [self::class, 'me'],
@@ -111,10 +116,68 @@ class DTC_JWT
             return new WP_Error('invalid_credentials', 'Invalid username or password.', ['status' => 401]);
         }
 
+        if (in_array('dtc_pending', $user->roles, true)) {
+            return new WP_Error(
+                'pending_approval',
+                'Your account is awaiting approval by our team. You will be notified once access is granted.',
+                ['status' => 403]
+            );
+        }
+
         return [
             'token' => self::issue($user),
             'user' => self::user_payload($user),
         ];
+    }
+
+    /**
+     * Public self-registration. The account is created with the
+     * "Pending Approval" role; an administrator promotes it to Customer
+     * (Users → edit user → Role) to grant portal access.
+     */
+    public static function register(WP_REST_Request $req)
+    {
+        $email = sanitize_email($req['email'] ?? '');
+        $name = sanitize_text_field($req['name'] ?? '');
+        $password = (string) ($req['password'] ?? '');
+
+        if (!is_email($email) || $name === '') {
+            return new WP_Error('invalid', 'A valid email and your full name are required.', ['status' => 400]);
+        }
+        if (strlen($password) < 8) {
+            return new WP_Error('weak_password', 'Password must be at least 8 characters.', ['status' => 400]);
+        }
+        if (email_exists($email)) {
+            return new WP_Error('exists', 'An account with this email already exists.', ['status' => 409]);
+        }
+
+        $user_id = wp_insert_user([
+            'user_login' => $email,
+            'user_email' => $email,
+            'user_pass' => $password,
+            'display_name' => $name,
+            'role' => 'dtc_pending',
+        ]);
+        if (is_wp_error($user_id)) {
+            return $user_id;
+        }
+
+        update_user_meta($user_id, 'organization', sanitize_text_field($req['organization'] ?? ''));
+        update_user_meta($user_id, 'country', sanitize_text_field($req['country'] ?? ''));
+        DTC_Security::audit('user_registered', ['user' => $user_id, 'email' => $email]);
+
+        $settings = DTC_Settings::get();
+        $to = $settings['contact']['support_email'] ?: get_bloginfo('admin_email');
+        wp_mail($to, 'New portal registration awaiting approval', sprintf(
+            "Name: %s\nEmail: %s\nOrganization: %s\nCountry: %s\n\nApprove: %s (set Role to Customer)",
+            $name,
+            $email,
+            $req['organization'] ?? '-',
+            $req['country'] ?? '-',
+            admin_url('user-edit.php?user_id=' . $user_id)
+        ));
+
+        return ['message' => 'Registration received. Your account will be reviewed and activated by our team.'];
     }
 
     public static function me()

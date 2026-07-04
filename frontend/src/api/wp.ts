@@ -49,6 +49,13 @@ export const login = (username: string, password: string) =>
     auth: false,
   })
 export const getMe = () => api<AuthUser>(`${V1}/auth/me`)
+export const register = (payload: {
+  name: string
+  email: string
+  password: string
+  organization: string
+  country: string
+}) => api<{ message: string }>(`${V1}/auth/register`, { method: 'POST', body: payload, auth: false })
 
 // ---- Forms ----
 export const submitInquiry = (payload: {

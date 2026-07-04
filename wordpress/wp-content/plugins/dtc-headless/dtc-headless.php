@@ -33,6 +33,12 @@ register_activation_hook(__FILE__, function () {
 register_deactivation_hook(__FILE__, 'flush_rewrite_rules');
 
 add_action('init', ['DTC_Post_Types', 'register']);
+add_action('init', function () {
+    // Ensure roles exist on installs updated without re-activation.
+    if (!get_role('dtc_pending')) {
+        DTC_Roles::add_roles();
+    }
+});
 add_action('rest_api_init', ['DTC_Rest_Content', 'register_routes']);
 add_action('rest_api_init', ['DTC_Rest_Forms', 'register_routes']);
 add_action('rest_api_init', ['DTC_Rest_Portal', 'register_routes']);

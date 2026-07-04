@@ -38,7 +38,9 @@ async function submit() {
       </form>
 
       <p class="mt-6 text-center text-xs text-slate-400">
-        Accounts are provisioned by our team. <RouterLink to="/contact" class="text-accent hover:underline">Contact us</RouterLink> to request access.
+        No account yet?
+        <RouterLink to="/register" class="text-accent hover:underline">Request portal access</RouterLink>
+        — reviewed and approved by our team.
       </p>
     </div>
   </div>
