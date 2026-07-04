@@ -26,8 +26,19 @@ export const useSettingsStore = defineStore('settings', () => {
     if (theme.primary) root.style.setProperty('--dtc-primary', theme.primary)
     if (theme.secondary) root.style.setProperty('--dtc-secondary', theme.secondary)
     if (theme.accent) root.style.setProperty('--dtc-accent', theme.accent)
-    if (settings.value?.company.name) {
-      document.title = settings.value.company.name
+    const company = settings.value?.company
+    if (company?.name) {
+      document.title = company.slogan ? `${company.name} — ${company.slogan}` : company.name
+    }
+    if (company?.favicon) {
+      let link = document.querySelector<HTMLLinkElement>('link[rel="icon"]')
+      if (!link) {
+        link = document.createElement('link')
+        link.rel = 'icon'
+        document.head.appendChild(link)
+      }
+      link.href = company.favicon
+      link.removeAttribute('type') // let the browser infer png/ico/svg
     }
   }
 
