@@ -114,14 +114,18 @@ function addToInquiry() {
             <li v-if="!product.features?.length" class="text-slate-400">No features listed.</li>
           </ul>
 
-          <table v-else-if="tab === 'specs'" class="w-full max-w-3xl text-sm">
-            <tbody>
-              <tr v-for="spec in product.specifications" :key="spec.label" class="border-b border-slate-100">
-                <td class="w-1/3 py-2.5 font-medium text-slate-500">{{ spec.label }}</td>
-                <td class="py-2.5 text-slate-800">{{ spec.value }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div v-else-if="tab === 'specs'">
+            <div v-if="product.specifications_html" class="specs-html max-w-4xl" v-html="product.specifications_html" />
+            <table v-else-if="product.specifications?.length" class="w-full max-w-3xl text-sm">
+              <tbody>
+                <tr v-for="spec in product.specifications" :key="spec.label" class="border-b border-slate-100">
+                  <td class="w-1/3 py-2.5 font-medium text-slate-500">{{ spec.label }}</td>
+                  <td class="py-2.5 text-slate-800">{{ spec.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p v-else class="text-slate-400">No specifications listed.</p>
+          </div>
 
           <ul v-else-if="tab === 'applications'" class="grid gap-3 sm:grid-cols-2">
             <li v-for="a in product.applications" :key="a" class="flex items-start gap-2 text-sm text-slate-700">
@@ -147,3 +151,40 @@ function addToInquiry() {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Styling for pasted HTML specification tables */
+.specs-html :deep(table) {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--color-slate-200);
+}
+.specs-html :deep(th),
+.specs-html :deep(td) {
+  padding: 0.65rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-slate-100);
+}
+.specs-html :deep(th),
+.specs-html :deep(thead td) {
+  background: var(--dtc-primary, #0b1f3a);
+  color: #fff;
+  font-weight: 600;
+}
+.specs-html :deep(tbody tr:nth-child(even)) {
+  background: var(--color-slate-50);
+}
+.specs-html :deep(caption),
+.specs-html :deep(h3),
+.specs-html :deep(h4) {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--dtc-primary, #0b1f3a);
+  margin: 1.5rem 0 0.5rem;
+  text-align: left;
+}
+</style>

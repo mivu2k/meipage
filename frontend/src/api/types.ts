@@ -27,6 +27,7 @@ export interface Product {
   videos: string[]
   features: string[]
   specifications: { label: string; value: string }[]
+  specifications_html: string
   applications: string[]
   brand: Term | null
   categories: Term[]

@@ -70,7 +70,10 @@ const company = computed(() => settings.settings?.company)
           </span>
         </RouterLink>
         <RouterLink v-if="auth.isAuthenticated" to="/portal" class="btn-primary hidden !py-2.5 sm:inline-flex">Portal</RouterLink>
-        <RouterLink v-else to="/login" class="btn-outline hidden !py-2.5 sm:inline-flex">Sign In</RouterLink>
+        <template v-else>
+          <RouterLink to="/login" class="btn-outline hidden !py-2.5 sm:inline-flex">Sign In</RouterLink>
+          <RouterLink to="/register" class="btn-primary hidden !py-2.5 md:inline-flex">Register</RouterLink>
+        </template>
         <button
           class="rounded-lg p-2.5 text-slate-600 transition hover:bg-slate-100 lg:hidden"
           :aria-expanded="mobileOpen"
@@ -97,14 +100,22 @@ const company = computed(() => settings.settings?.company)
           >
             {{ item.label }}
           </RouterLink>
-          <RouterLink
-            v-if="!auth.isAuthenticated"
-            to="/login"
-            class="mt-2 rounded-lg bg-primary px-3 py-3 text-center text-sm font-semibold text-white"
-            @click="mobileOpen = false"
-          >
-            Sign In
-          </RouterLink>
+          <template v-if="!auth.isAuthenticated">
+            <RouterLink
+              to="/login"
+              class="mt-2 rounded-lg border border-slate-300 px-3 py-3 text-center text-sm font-semibold text-slate-700"
+              @click="mobileOpen = false"
+            >
+              Sign In
+            </RouterLink>
+            <RouterLink
+              to="/register"
+              class="mt-2 rounded-lg bg-primary px-3 py-3 text-center text-sm font-semibold text-white"
+              @click="mobileOpen = false"
+            >
+              Register
+            </RouterLink>
+          </template>
         </div>
       </nav>
     </Transition>

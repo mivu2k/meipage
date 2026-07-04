@@ -115,6 +115,7 @@ class DTC_Rest_Content
                 'videos' => self::meta_list($p->ID, 'videos'),
                 'features' => self::meta_list($p->ID, 'features'),
                 'specifications' => is_array($specs) ? $specs : [],
+                'specifications_html' => wp_kses_post((string) get_post_meta($p->ID, 'specifications_html', true)),
                 'applications' => self::meta_list($p->ID, 'applications'),
                 'accessories' => array_map('intval', (array) (get_post_meta($p->ID, 'accessories', true) ?: [])),
                 'compatible' => array_map('intval', (array) (get_post_meta($p->ID, 'compatible', true) ?: [])),

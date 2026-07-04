@@ -35,9 +35,10 @@ class DTC_Meta_Boxes
         return [
             'dtc_product' => ['Product Details', [
                 ['key' => 'features', 'label' => 'Features', 'type' => 'lines', 'hint' => 'One feature per line'],
-                ['key' => 'specifications', 'label' => 'Specifications', 'type' => 'repeater', 'fields' => [
+                ['key' => 'specifications', 'label' => 'Specifications (simple rows)', 'type' => 'repeater', 'fields' => [
                     ['key' => 'label', 'label' => 'Label'], ['key' => 'value', 'label' => 'Value'],
                 ]],
+                ['key' => 'specifications_html', 'label' => 'Specifications (HTML)', 'type' => 'textarea', 'hint' => 'Optional: paste full HTML (multiple tables supported). When filled, this is shown on the website instead of the simple rows above.'],
                 ['key' => 'applications', 'label' => 'Applications', 'type' => 'lines', 'hint' => 'One per line'],
                 ['key' => 'certifications', 'label' => 'Certifications', 'type' => 'lines', 'hint' => 'One per line, e.g. MIL-STD-810G'],
                 ['key' => 'videos', 'label' => 'Video URLs', 'type' => 'lines', 'hint' => 'One YouTube/Vimeo URL per line'],
