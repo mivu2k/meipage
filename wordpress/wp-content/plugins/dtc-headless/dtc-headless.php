@@ -22,6 +22,7 @@ require_once DTC_PATH . 'includes/class-dtc-rest-forms.php';
 require_once DTC_PATH . 'includes/class-dtc-rest-portal.php';
 require_once DTC_PATH . 'includes/class-dtc-security.php';
 require_once DTC_PATH . 'includes/class-dtc-admin.php';
+require_once DTC_PATH . 'includes/class-dtc-meta-boxes.php';
 
 register_activation_hook(__FILE__, function () {
     DTC_Post_Types::register();
@@ -40,3 +41,4 @@ add_action('rest_api_init', ['DTC_Settings', 'register_routes']);
 DTC_JWT::init();
 DTC_Security::init();
 DTC_Admin::init();
+DTC_Meta_Boxes::init();
