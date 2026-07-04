@@ -33,17 +33,17 @@ const { data: posts } = useQuery({
           <span class="inline-block h-2 w-2 animate-pulse rounded-full bg-accent" aria-hidden="true" />
           {{ company?.slogan || 'Mission-Critical Technology' }}
         </p>
-        <h1 v-reveal="100" class="max-w-3xl text-4xl leading-[1.1] font-bold sm:text-6xl">
+        <h1 v-reveal="100" class="max-w-4xl text-4xl leading-[1.05] font-bold tracking-tight sm:text-6xl lg:text-7xl">
           {{ home?.hero_title || 'Advanced Defense & Communication Systems' }}
         </h1>
         <p v-reveal="200" class="mt-6 max-w-2xl text-lg text-slate-300">
           {{ home?.hero_subtitle || 'Integrated tactical communication, surveillance and command & control solutions for defense and security organizations.' }}
         </p>
         <div v-reveal="300" class="mt-9 flex flex-wrap gap-4">
-          <RouterLink :to="home?.hero_cta_link || '/solutions'" class="btn-accent">
+          <RouterLink v-magnetic :to="home?.hero_cta_link || '/solutions'" class="btn-accent">
             {{ home?.hero_cta_label || 'Explore Solutions' }} →
           </RouterLink>
-          <RouterLink to="/contact" class="btn-ghost-dark">Contact Us</RouterLink>
+          <RouterLink v-magnetic to="/contact" class="btn-ghost-dark">Contact Us</RouterLink>
         </div>
       </div>
     </section>
@@ -170,7 +170,7 @@ const { data: posts } = useQuery({
         <p v-reveal="100" class="mt-4 max-w-2xl text-slate-300">
           {{ home?.cta?.text || 'Our engineers will help you design the right solution for your mission.' }}
         </p>
-        <RouterLink v-reveal="200" :to="home?.cta?.button_link || '/contact'" class="btn-accent mt-9">
+        <RouterLink v-reveal="200" v-magnetic :to="home?.cta?.button_link || '/contact'" class="btn-accent mt-9">
           {{ home?.cta?.button_label || 'Request Consultation' }} →
         </RouterLink>
       </div>
