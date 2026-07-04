@@ -21,7 +21,12 @@ jQuery(function ($) {
       } else {
         var a = sel[0];
         wrap.find('input[type=hidden]').val(a.id);
-        wrap.find('.dtc-media-name').text(a.filename || a.title);
+        var thumb = a.sizes && a.sizes.thumbnail ? a.sizes.thumbnail.url : a.icon;
+        if (wrap.hasClass('dtc-media-cell') && thumb) {
+          wrap.find('.dtc-media-name').html('<img src="' + thumb + '" style="width:36px;height:36px;object-fit:cover;vertical-align:middle;border-radius:4px">');
+        } else {
+          wrap.find('.dtc-media-name').text(a.filename || a.title);
+        }
       }
     });
     frame.open();

@@ -118,6 +118,13 @@ class DTC_Rest_Content
                 'specifications_html' => wp_kses_post((string) get_post_meta($p->ID, 'specifications_html', true)),
                 'applications' => self::meta_list($p->ID, 'applications'),
                 'accessories' => array_map('intval', (array) (get_post_meta($p->ID, 'accessories', true) ?: [])),
+                'accessories_items' => array_values(array_filter(array_map(
+                    fn($row) => is_array($row) && !empty($row['name']) ? [
+                        'name' => (string) $row['name'],
+                        'image' => self::media((int) ($row['image'] ?? 0)),
+                    ] : null,
+                    (array) (get_post_meta($p->ID, 'accessories_items', true) ?: [])
+                ))),
                 'compatible' => array_map('intval', (array) (get_post_meta($p->ID, 'compatible', true) ?: [])),
                 'related' => array_map('intval', (array) (get_post_meta($p->ID, 'related', true) ?: [])),
                 'downloads' => self::downloads_for($p->ID),

@@ -9,7 +9,7 @@ const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 const inquiry = useInquiryStore()
 const activeImage = ref(0)
-const tab = ref<'features' | 'specs' | 'applications' | 'downloads'>('features')
+const tab = ref<'features' | 'specs' | 'accessories' | 'downloads'>('features')
 
 const { data: product, isLoading } = useQuery({
   queryKey: ['product', slug],
@@ -94,7 +94,7 @@ function addToInquiry() {
       <div class="mt-14">
         <div class="flex gap-1 border-b border-slate-200" role="tablist">
           <button
-            v-for="t in (['features', 'specs', 'applications', 'downloads'] as const)"
+            v-for="t in (['features', 'specs', 'accessories', 'downloads'] as const)"
             :key="t"
             role="tab"
             :aria-selected="tab === t"
@@ -127,11 +127,28 @@ function addToInquiry() {
             <p v-else class="text-slate-400">No specifications listed.</p>
           </div>
 
-          <ul v-else-if="tab === 'applications'" class="grid gap-3 sm:grid-cols-2">
-            <li v-for="a in product.applications" :key="a" class="flex items-start gap-2 text-sm text-slate-700">
-              <span class="mt-0.5 text-accent">▸</span>{{ a }}
-            </li>
-          </ul>
+          <div v-else-if="tab === 'accessories'">
+            <div v-if="product.accessories_items?.length" class="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+              <div
+                v-for="(acc, i) in product.accessories_items"
+                :key="i"
+                class="card card-hover overflow-hidden text-center"
+              >
+                <div class="aspect-square bg-gradient-to-br from-slate-50 to-slate-100">
+                  <img
+                    v-if="acc.image"
+                    :src="acc.image.url"
+                    :alt="acc.image.alt || acc.name"
+                    class="h-full w-full object-contain p-4"
+                    loading="lazy"
+                  />
+                  <div v-else class="flex h-full items-center justify-center text-3xl text-slate-300" aria-hidden="true">◈</div>
+                </div>
+                <div class="p-4 text-sm font-semibold text-primary">{{ acc.name }}</div>
+              </div>
+            </div>
+            <p v-else class="text-slate-400">No accessories listed.</p>
+          </div>
 
           <ul v-else class="max-w-3xl divide-y divide-slate-100">
             <li v-for="d in product.downloads" :key="d.id" class="flex items-center justify-between py-3">

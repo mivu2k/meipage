@@ -39,12 +39,13 @@ class DTC_Meta_Boxes
                     ['key' => 'label', 'label' => 'Label'], ['key' => 'value', 'label' => 'Value'],
                 ]],
                 ['key' => 'specifications_html', 'label' => 'Specifications (HTML)', 'type' => 'textarea', 'hint' => 'Optional: paste full HTML (multiple tables supported). When filled, this is shown on the website instead of the simple rows above.'],
-                ['key' => 'applications', 'label' => 'Applications', 'type' => 'lines', 'hint' => 'One per line'],
+                ['key' => 'accessories_items', 'label' => 'Accessories', 'type' => 'repeater', 'hint' => 'Simple accessory entries shown on the product page — no separate product needed.', 'fields' => [
+                    ['key' => 'name', 'label' => 'Name'], ['key' => 'image', 'label' => 'Picture', 'type' => 'media'],
+                ]],
                 ['key' => 'certifications', 'label' => 'Certifications', 'type' => 'lines', 'hint' => 'One per line, e.g. MIL-STD-810G'],
                 ['key' => 'videos', 'label' => 'Video URLs', 'type' => 'lines', 'hint' => 'One YouTube/Vimeo URL per line'],
                 ['key' => 'gallery', 'label' => 'Gallery Images', 'type' => 'media_multi'],
                 ['key' => 'downloads', 'label' => 'Downloads (datasheets, manuals…)', 'type' => 'post_multi', 'post_type' => 'dtc_download'],
-                ['key' => 'accessories', 'label' => 'Accessories', 'type' => 'post_multi', 'post_type' => 'dtc_product'],
                 ['key' => 'compatible', 'label' => 'Compatible Products', 'type' => 'post_multi', 'post_type' => 'dtc_product'],
                 ['key' => 'related', 'label' => 'Related Products', 'type' => 'post_multi', 'post_type' => 'dtc_product'],
             ]],
@@ -247,6 +248,20 @@ class DTC_Meta_Boxes
 
             case 'repeater':
                 $rows = is_array($value) ? array_values($value) : [];
+                $cell = function (array $sub, $i, $val) use ($name): string {
+                    $input_name = sprintf('%s[%s][%s]', $name, $i, esc_attr($sub['key']));
+                    if (($sub['type'] ?? 'text') === 'media') {
+                        $id = (int) $val;
+                        $thumb = $id ? wp_get_attachment_image_url($id, 'thumbnail') : '';
+                        return '<td><div class="dtc-media-field dtc-media-cell" data-multi="0">'
+                            . sprintf('<input type="hidden" name="%s" value="%s">', $input_name, esc_attr($id ?: ''))
+                            . '<button class="button dtc-media-btn">Select</button> '
+                            . '<span class="dtc-media-name">' . ($thumb ? '<img src="' . esc_url($thumb) . '" style="width:36px;height:36px;object-fit:cover;vertical-align:middle;border-radius:4px">' : 'No image') . '</span>'
+                            . '</div></td>';
+                    }
+                    return sprintf('<td><input type="text" name="%s" value="%s"></td>', $input_name, esc_attr((string) $val));
+                };
+
                 echo '<div class="dtc-repeater"><table><thead><tr>';
                 foreach ($f['fields'] as $sub) {
                     echo '<th>' . esc_html($sub['label']) . '</th>';
@@ -255,7 +270,7 @@ class DTC_Meta_Boxes
                 foreach ($rows as $i => $row) {
                     echo '<tr>';
                     foreach ($f['fields'] as $sub) {
-                        printf('<td><input type="text" name="%s[%d][%s]" value="%s"></td>', $name, $i, esc_attr($sub['key']), esc_attr((string) ($row[$sub['key']] ?? '')));
+                        echo $cell($sub, $i, $row[$sub['key']] ?? '');
                     }
                     echo '<td><a href="#" class="dtc-rep-remove">×</a></td></tr>';
                 }
@@ -263,7 +278,7 @@ class DTC_Meta_Boxes
                 // Template row for the JS "Add Row" button
                 echo '<script type="text/template" class="dtc-rep-template">';
                 foreach ($f['fields'] as $sub) {
-                    printf('<td><input type="text" name="%s[__i__][%s]" value=""></td>', $name, esc_attr($sub['key']));
+                    echo $cell($sub, '__i__', '');
                 }
                 echo '<td><a href="#" class="dtc-rep-remove">×</a></td></script>';
                 echo '<p><button class="button dtc-rep-add">Add Row</button></p></div>';

@@ -32,6 +32,7 @@ export interface Product {
   brand: Term | null
   categories: Term[]
   accessories: number[]
+  accessories_items: { name: string; image: MediaItem | null }[]
   compatible: number[]
   related: number[]
   downloads: DownloadFile[]
