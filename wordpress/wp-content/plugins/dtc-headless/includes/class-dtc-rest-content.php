@@ -218,10 +218,17 @@ class DTC_Rest_Content
         ];
     }
 
-    public static function solutions()
+    public static function solutions(WP_REST_Request $req)
     {
-        $posts = get_posts(['post_type' => 'dtc_solution', 'numberposts' => -1, 'orderby' => 'menu_order title', 'order' => 'ASC']);
-        return array_map([self::class, 'solution_payload'], $posts);
+        $q = new WP_Query([
+            'post_type' => 'dtc_solution',
+            'post_status' => 'publish',
+            'posts_per_page' => min(48, (int) ($req['per_page'] ?: 12)),
+            'paged' => max(1, (int) ($req['page'] ?: 1)),
+            'orderby' => 'menu_order title',
+            'order' => 'ASC',
+        ]);
+        return self::paged($q, fn($p) => self::solution_payload($p));
     }
 
     public static function solution(WP_REST_Request $req)

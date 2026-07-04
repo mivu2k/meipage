@@ -3,8 +3,14 @@ import { ref, computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { getPosts } from '@/api/wp'
 import PageHero from '@/components/common/PageHero.vue'
+import AppPagination from '@/components/common/AppPagination.vue'
 
 const page = ref(1)
+
+function setPage(n: number) {
+  page.value = n
+  window.scrollTo({ top: 0 })
+}
 const params = computed(() => ({ page: page.value, per_page: 9 }))
 const { data, isLoading } = useQuery({
   queryKey: ['posts', params],
@@ -35,17 +41,7 @@ const { data, isLoading } = useQuery({
           </div>
         </RouterLink>
       </div>
-      <nav v-if="data && data.pages > 1" class="mt-10 flex justify-center gap-2" aria-label="Pagination">
-        <button
-          v-for="n in data.pages"
-          :key="n"
-          class="h-9 w-9 rounded-md text-sm font-medium"
-          :class="n === page ? 'bg-primary text-white' : 'border border-slate-300 text-slate-600'"
-          @click="page = n"
-        >
-          {{ n }}
-        </button>
-      </nav>
+      <AppPagination v-if="data" :page="page" :pages="data.pages" @change="setPage" />
     </div>
   </div>
 </template>

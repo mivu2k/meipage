@@ -3,8 +3,19 @@ import { ref, computed, watch } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { getSolutions } from '@/api/wp'
 import PageHero from '@/components/common/PageHero.vue'
+import AppPagination from '@/components/common/AppPagination.vue'
 
-const { data: solutions, isLoading } = useQuery({ queryKey: ['solutions'], queryFn: getSolutions })
+const page = ref(1)
+const { data, isLoading } = useQuery({
+  queryKey: ['solutions', page],
+  queryFn: () => getSolutions({ page: page.value, per_page: 12 }),
+})
+const solutions = computed(() => data.value?.items)
+
+function setPage(n: number) {
+  page.value = n
+  window.scrollTo({ top: 0 })
+}
 
 type ViewMode = 'list' | '1' | '2' | '3' | '4'
 const VIEW_KEY = 'dtc_solutions_view'
@@ -98,6 +109,8 @@ const options: { key: ViewMode; label: string }[] = [
           </div>
         </RouterLink>
       </div>
+
+      <AppPagination v-if="data" :page="page" :pages="data.pages" @change="setPage" />
     </div>
   </div>
 </template>

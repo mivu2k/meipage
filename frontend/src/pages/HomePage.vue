@@ -14,7 +14,11 @@ const { data: products } = useQuery({
   queryKey: ['products', 'featured'],
   queryFn: () => getProducts({ per_page: 4 }),
 })
-const { data: solutions } = useQuery({ queryKey: ['solutions'], queryFn: getSolutions })
+const { data: solutionsPage } = useQuery({
+  queryKey: ['solutions', 'featured'],
+  queryFn: () => getSolutions({ per_page: 4 }),
+})
+const solutions = computed(() => solutionsPage.value?.items)
 const { data: brands } = useQuery({ queryKey: ['brands'], queryFn: getBrands })
 const { data: posts } = useQuery({
   queryKey: ['posts', 'latest'],

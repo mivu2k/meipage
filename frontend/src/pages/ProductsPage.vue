@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/vue-query'
 import { getProducts, getBrands, getProductCategories } from '@/api/wp'
 import PageHero from '@/components/common/PageHero.vue'
 import ProductCard from '@/components/common/ProductCard.vue'
+import AppPagination from '@/components/common/AppPagination.vue'
 
 const page = ref(1)
 const search = ref('')
@@ -24,6 +25,11 @@ const { data, isLoading } = useQuery({
 })
 const { data: brands } = useQuery({ queryKey: ['brands'], queryFn: getBrands })
 const { data: categories } = useQuery({ queryKey: ['product-categories'], queryFn: getProductCategories })
+
+function setPage(n: number) {
+  page.value = n
+  window.scrollTo({ top: 0 })
+}
 
 function resetPage() {
   page.value = 1
@@ -61,17 +67,7 @@ function resetPage() {
         <ProductCard v-for="p in data.items" :key="p.id" :product="p" />
       </div>
 
-      <nav v-if="data && data.pages > 1" class="mt-10 flex justify-center gap-2" aria-label="Pagination">
-        <button
-          v-for="n in data.pages"
-          :key="n"
-          class="h-9 w-9 rounded-md text-sm font-medium"
-          :class="n === page ? 'bg-primary text-white' : 'border border-slate-300 text-slate-600 hover:border-primary'"
-          @click="page = n"
-        >
-          {{ n }}
-        </button>
-      </nav>
+      <AppPagination v-if="data" :page="page" :pages="data.pages" @change="setPage" />
     </div>
   </div>
 </template>

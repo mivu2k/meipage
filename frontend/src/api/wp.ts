@@ -32,7 +32,8 @@ export const getProduct = (slug: string) => api<Product>(`${V1}/products/${slug}
 export const getBrands = () => api<Brand[]>(`${V1}/brands`)
 export const getBrand = (slug: string) => api<Brand>(`${V1}/brands/${slug}`)
 export const getProductCategories = () => api<Term[]>(`${V1}/product-categories`)
-export const getSolutions = () => api<Solution[]>(`${V1}/solutions`)
+export const getSolutions = (params: { page?: number; per_page?: number } = {}) =>
+  api<Paged<Solution>>(`${V1}/solutions`, { params })
 export const getSolution = (slug: string) => api<Solution>(`${V1}/solutions/${slug}`)
 export const getPosts = (params: { page?: number; per_page?: number; category?: string }) =>
   api<Paged<Post>>(`${V1}/posts`, { params })
