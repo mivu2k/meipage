@@ -13,9 +13,10 @@ class DTC_Meta_Boxes
         add_action('add_meta_boxes', [self::class, 'add_boxes']);
         add_action('save_post', [self::class, 'save'], 10, 2);
         add_action('admin_enqueue_scripts', [self::class, 'assets']);
-        // Data-heavy types get the classic editor (plain forms, no blocks).
+        // All DTC types use the classic editor: a plain form with title,
+        // description box and the structured fields below — no blocks.
         add_filter('use_block_editor_for_post_type', function ($use, $type) {
-            return in_array($type, ['dtc_download', 'dtc_branch', 'dtc_inquiry', 'dtc_ticket', 'dtc_repair', 'dtc_application'], true) ? false : $use;
+            return str_starts_with($type, 'dtc_') ? false : $use;
         }, 10, 2);
     }
 
