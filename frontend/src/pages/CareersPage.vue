@@ -1,19 +1,31 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useQuery, useMutation } from '@tanstack/vue-query'
-import { getCareers, submitApplication } from '@/api/wp'
+import { getCareers, submitApplication, uploadResume } from '@/api/wp'
 import PageHero from '@/components/common/PageHero.vue'
 
 const { data: positions, isLoading } = useQuery({ queryKey: ['careers'], queryFn: getCareers })
 
 const applyingTo = ref<number | null>(null)
 const form = ref({ name: '', email: '', phone: '', cover_letter: '' })
+const resumeFile = ref<File | null>(null)
+
+function onFileChange(e: Event) {
+  resumeFile.value = (e.target as HTMLInputElement).files?.[0] ?? null
+}
 
 const apply = useMutation({
-  mutationFn: () => submitApplication({ ...form.value, position: applyingTo.value! }),
+  mutationFn: async () => {
+    let resume_media_id: number | undefined
+    if (resumeFile.value) {
+      resume_media_id = (await uploadResume(resumeFile.value)).id
+    }
+    return submitApplication({ ...form.value, position: applyingTo.value!, resume_media_id })
+  },
   onSuccess: () => {
     applyingTo.value = null
     form.value = { name: '', email: '', phone: '', cover_letter: '' }
+    resumeFile.value = null
   },
 })
 </script>
@@ -49,7 +61,17 @@ const apply = useMutation({
               <input v-model="form.email" required type="email" placeholder="Email" class="input" />
               <input v-model="form.phone" placeholder="Phone" class="input" />
             </div>
-            <textarea v-model="form.cover_letter" rows="4" placeholder="Cover letter / link to your resume…" class="input" />
+            <textarea v-model="form.cover_letter" rows="4" placeholder="Cover letter…" class="input" />
+            <div>
+              <label class="mb-1 block text-xs font-semibold text-slate-500">Resume / CV (PDF, DOC, DOCX — max 10 MB)</label>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                class="block w-full cursor-pointer rounded-lg border border-dashed border-slate-300 px-4 py-3 text-sm text-slate-500 transition file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-4 file:py-1.5 file:text-xs file:font-semibold file:text-white hover:border-accent"
+                @change="onFileChange"
+              />
+              <p v-if="resumeFile" class="mt-1 text-xs text-slate-500">Selected: {{ resumeFile.name }}</p>
+            </div>
             <button type="submit" class="btn-primary" :disabled="apply.isPending.value">
               {{ apply.isPending.value ? 'Submitting…' : 'Submit Application' }}
             </button>

@@ -74,13 +74,27 @@ const { data: posts } = useQuery({
             :key="sol.id"
             v-reveal="i * 80"
             :to="`/solutions/${sol.slug}`"
-            class="card card-hover group p-7"
+            class="card card-hover group overflow-hidden"
           >
-            <div class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent transition group-hover:bg-accent group-hover:text-surface" aria-hidden="true">
-              ◈
+            <div v-if="sol.image" class="overflow-hidden">
+              <img
+                :src="sol.image.url"
+                :alt="sol.image.alt || sol.title"
+                class="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
             </div>
-            <h3 class="font-display font-semibold text-primary transition group-hover:text-accent">{{ sol.title }}</h3>
-            <p class="mt-2 line-clamp-3 text-sm text-slate-500">{{ sol.excerpt }}</p>
+            <div class="p-6">
+              <div
+                v-if="!sol.image"
+                class="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent transition group-hover:bg-accent group-hover:text-surface"
+                aria-hidden="true"
+              >
+                ◈
+              </div>
+              <h3 class="font-display font-semibold text-primary transition group-hover:text-accent">{{ sol.title }}</h3>
+              <p class="mt-2 line-clamp-3 text-sm text-slate-500">{{ sol.excerpt }}</p>
+            </div>
           </RouterLink>
         </div>
       </div>

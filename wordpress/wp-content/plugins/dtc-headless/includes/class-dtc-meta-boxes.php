@@ -111,6 +111,9 @@ class DTC_Meta_Boxes
                 ['key' => 'serial', 'label' => 'Serial Number', 'type' => 'text'],
                 ['key' => 'stage', 'label' => 'Stage', 'type' => 'select', 'options' => $stages],
                 ['key' => '_stage_note', 'label' => 'Stage Note', 'type' => 'text', 'hint' => 'Optional note recorded with the stage change', 'virtual' => true],
+                ['key' => 'documents', 'label' => 'Documents for Customer (quotation, report…)', 'type' => 'repeater', 'hint' => 'PDFs the customer can download from their portal repair tracking.', 'fields' => [
+                    ['key' => 'label', 'label' => 'Document Name'], ['key' => 'file', 'label' => 'File', 'type' => 'media'],
+                ]],
             ]],
         ];
     }

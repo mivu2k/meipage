@@ -134,6 +134,7 @@ export interface RepairCase {
   serial: string
   stage: RepairStage
   history: { stage: RepairStage; date: string; note: string }[]
+  documents: { label: string; url: string }[]
 }
 
 export interface SiteSettings {

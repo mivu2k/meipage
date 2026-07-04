@@ -233,6 +233,13 @@ class DTC_Rest_Portal
         ]);
         return array_map(function (WP_Post $p) {
             $history = get_post_meta($p->ID, 'history', true);
+            $documents = array_values(array_filter(array_map(function ($row) {
+                if (!is_array($row) || empty($row['file'])) {
+                    return null;
+                }
+                $url = wp_get_attachment_url((int) $row['file']);
+                return $url ? ['label' => (string) ($row['label'] ?: 'Document'), 'url' => $url] : null;
+            }, (array) (get_post_meta($p->ID, 'documents', true) ?: []))));
             return [
                 'id' => $p->ID,
                 'rma' => (string) get_post_meta($p->ID, 'rma', true) ?: ('RMA-' . $p->ID),
@@ -240,6 +247,7 @@ class DTC_Rest_Portal
                 'serial' => (string) get_post_meta($p->ID, 'serial', true),
                 'stage' => (string) get_post_meta($p->ID, 'stage', true) ?: 'received',
                 'history' => is_array($history) ? $history : [],
+                'documents' => $documents,
             ];
         }, $posts);
     }

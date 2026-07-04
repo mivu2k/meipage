@@ -22,6 +22,48 @@ class DTC_Rest_Forms
                 'permission_callback' => [self::class, 'rate_limit'],
             ]);
         }
+
+        register_rest_route(DTC_API_NAMESPACE, '/uploads/resume', [
+            'methods' => 'POST',
+            'callback' => [self::class, 'upload_resume'],
+            'permission_callback' => [self::class, 'rate_limit'],
+        ]);
+    }
+
+    /** Resume upload for job applications: PDF/DOC/DOCX, max 10 MB. */
+    public static function upload_resume(WP_REST_Request $req)
+    {
+        $files = $req->get_file_params();
+        if (empty($files['file'])) {
+            return new WP_Error('no_file', 'No file uploaded.', ['status' => 400]);
+        }
+        $file = $files['file'];
+        if (($file['size'] ?? 0) > 10 * MB_IN_BYTES) {
+            return new WP_Error('too_large', 'File must be under 10 MB.', ['status' => 400]);
+        }
+        $allowed = [
+            'pdf' => 'application/pdf',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ];
+        $check = wp_check_filetype($file['name'], $allowed);
+        if (!$check['ext']) {
+            return new WP_Error('bad_type', 'Only PDF, DOC or DOCX files are accepted.', ['status' => 400]);
+        }
+
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+
+        $id = media_handle_sideload([
+            'name' => sanitize_file_name($file['name']),
+            'type' => $file['type'],
+            'tmp_name' => $file['tmp_name'],
+            'error' => $file['error'],
+            'size' => $file['size'],
+        ], 0, 'Resume upload');
+
+        return is_wp_error($id) ? $id : ['id' => $id];
     }
 
     /** Simple per-IP rate limit for public forms: 10 submissions / 10 min. */

@@ -92,6 +92,16 @@ export const submitApplication = (payload: {
   resume_media_id?: number
 }) => api<{ id: number }>(`${V1}/applications`, { method: 'POST', body: payload })
 
+/** Multipart resume upload (PDF/DOC/DOCX ≤ 10 MB) → media ID for applications. */
+export async function uploadResume(file: File): Promise<{ id: number }> {
+  const body = new FormData()
+  body.append('file', file)
+  const res = await fetch(`${V1}/uploads/resume`, { method: 'POST', body })
+  const json = await res.json()
+  if (!res.ok) throw new Error(json.message || 'Upload failed')
+  return json
+}
+
 // ---- Customer portal (authenticated) ----
 export const getMyDownloads = () => api<DownloadFile[]>(`${V1}/portal/downloads`)
 export const getMyProducts = () => api<Product[]>(`${V1}/portal/products`)

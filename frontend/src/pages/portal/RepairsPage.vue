@@ -51,6 +51,19 @@ const stageIndex = (s: RepairStage) => stages.findIndex((x) => x.key === s)
           </li>
         </ol>
 
+        <!-- Documents for the customer (quotation, inspection report…) -->
+        <div v-if="r.documents?.length" class="mt-5 rounded-lg bg-slate-50 p-4">
+          <h4 class="mb-2 text-xs font-bold tracking-wide text-slate-500 uppercase">Documents</h4>
+          <ul class="space-y-2">
+            <li v-for="doc in r.documents" :key="doc.url" class="flex items-center justify-between gap-3">
+              <span class="text-sm text-slate-700">{{ doc.label }}</span>
+              <a :href="doc.url" target="_blank" rel="noopener" class="btn-outline !px-4 !py-1.5 text-xs" download>
+                Download
+              </a>
+            </li>
+          </ul>
+        </div>
+
         <details v-if="r.history?.length" class="mt-4">
           <summary class="cursor-pointer text-xs font-medium text-slate-500">History</summary>
           <ul class="mt-2 space-y-1 text-xs text-slate-600">
